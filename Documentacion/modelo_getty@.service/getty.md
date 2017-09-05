@@ -25,14 +25,14 @@ Tradicionalmente, el sistema _init_ en máquinas _Linux_ estaba configurado para
 
 Con la llegada de _systemd_ se hizo de un modo más dinámico: los _login prompts_ se inician sólo bajo demanda a medida que el usuario cambia a terminales virtuales no utilizadas, es decir, los servicios _autovt_ se generan automáticamente y estos se instancian desde la unidad de plantilla _autovt@.service_ para el nombre correspondiente, como por ejemplo, _autovt@tty4.service_.
 
-Por lo tanto, el servicio _getty_ se instancia a _getty@tty2.service_, _getty@tty5.service_ y así sucesivamente, ya que _autovt@.service_ es un enlace simbólico que apunta a _getty@.service_.
+Por lo tanto, el servicio _getty_ se instancia a _getty\@tty2.service_, _getty\@tty5.service_ y así sucesivamente, ya que _autovt@.service_ es un enlace simbólico que apunta a _getty@.service_.
 
 Ya que no tenemos que iniciar incondicionalmente los procesos _getty_, esto nos permite ahorrar un poco de recursos y hace que la puesta en marcha sea un poco más rápida. Este comportamiento es principalmente transparente para el usuario: si el usuario activa una _TV_, el _getty_ se inicia de forma inmediata, de modo que el usuario difícilmente notará que no estaba funcionando todo el tiempo.
 
 Por defecto, este _spawning_ automático se realiza para las _TTVV_ hasta la _tty6_ sólamente (para estar cerca de la configuración predeterminada tradicional de los sistemas _Linux_). Hay que tener en cuenta que el _auto-spawning_ de _gettys_ sólo se intenta si ningún otro subsistema ha tomado posesión de las _TTVV_ todavía.
 
 
-#### Las terminales _tty1_ y _tty6_
+### Las terminales _tty1_ y _tty6_
 
 Dos terminales virtuales son manejadas especialmente por la lógica del _auto-spawning_:
 
