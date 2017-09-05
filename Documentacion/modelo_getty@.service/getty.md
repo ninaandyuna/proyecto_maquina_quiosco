@@ -32,7 +32,7 @@ Ya que no tenemos que iniciar incondicionalmente los procesos _getty_, esto nos 
 Por defecto, este _spawning_ automático se realiza para las _TTVV_ hasta la _tty6_ sólamente (para estar cerca de la configuración predeterminada tradicional de los sistemas _Linux_). Hay que tener en cuenta que el _auto-spawning_ de _gettys_ sólo se intenta si ningún otro subsistema ha tomado posesión de las _TTVV_ todavía.
 
 
-#### _tty1_ y _tty6_
+#### Las terminales _tty1_ y _tty6_
 
 Dos terminales virtuales son manejadas especialmente por la lógica del _auto-spawning_:
 
