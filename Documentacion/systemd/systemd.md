@@ -22,6 +22,14 @@ Es un gestor del sistema y de los servicios para _Linux_ que se ejecuta como _PI
 
 
 
+
+
+
+
+
+
+
+
 ## El cambio a _systemd_
 
 Por muchos años, el _PID_ 1 de _Linux_ y _Unix_ ha sido el proceso _Init_. Este proceso era el responsable de la activación de otros servicios en el sistema. Normalmente, los demonios eran iniciados en el arranque por _System V_ y por los _scripts_ de _Init_. Menos frecuentes eran los demonios iniciados bajo demanda por otro servicio, como con _Inetd_ o _Xinetd_.
