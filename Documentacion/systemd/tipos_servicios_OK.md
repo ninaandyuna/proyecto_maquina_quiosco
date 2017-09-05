@@ -3,21 +3,12 @@
 
 Existen distintos tipos de inicio a considerar cuando se escribe un archivo de servicio personalizado. Esto se configura con el parámetro _Type=_ en la sección _[Service]_:
 
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
-
-
 | Tipo | Descripcion |
+
 | :---: | ----------- |
+
 | _Type=simple_ (por defecto) | _systemd_ consedira que el servicio se iniciará de inmediato. El proceso iniciado con _ExecStart=_ es el proceso principal del servicio. |
 
-
-## Type=simple (por defecto)
-
-_systemd_ consedira que el servicio se iniciará de inmediato. El proceso iniciado con _ExecStart=_ es el proceso 
 
 
 ## Type=forking
