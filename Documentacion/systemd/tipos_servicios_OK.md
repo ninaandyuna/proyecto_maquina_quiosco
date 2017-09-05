@@ -11,13 +11,13 @@ Existen distintos tipos de inicio a considerar cuando se escribe un archivo de s
 
 
 | Tipo | Descripcion |
-| --- | --- |
-| _Type=simple_ (por defecto) | _systemd_ consedira que el servicio se iniciará de inmediato. El proceso iniciado con _ExecStart=_ es el proceso |
+| ---- | ----------- |
+| _Type=simple_ (por defecto) | _systemd_ consedira que el servicio se iniciará de inmediato. El proceso iniciado con _ExecStart=_ es el proceso principal del servicio. |
 
 
 ## Type=simple (por defecto)
 
-_systemd_ consedira que el servicio se iniciará de inmediato. El proceso iniciado con _ExecStart=_ es el proceso principal del servicio.
+_systemd_ consedira que el servicio se iniciará de inmediato. El proceso iniciado con _ExecStart=_ es el proceso 
 
 
 ## Type=forking
