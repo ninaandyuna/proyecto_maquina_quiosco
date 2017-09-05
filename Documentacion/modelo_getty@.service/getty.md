@@ -62,7 +62,9 @@ El especificador `%I` hace referencia al nombre de la instancia sin escapar, es 
 
 Por último, el valor de la variable de entorno `$TERM` indica el tipo de terminal. El valor predeterminado es _vt100_ o _linux_ para _Linux_ en un terminal virtual.
 
-`Type=idle`
+```
+Type=idle
+```
 
 Esta directiva retrasará el inicio del servicio hasta que se completen todos los trabajos (solicitudes de cambio de estado a las unidades) para evitar contaminar el _login prompt_ con mensajes de inicio del sistema.
 
