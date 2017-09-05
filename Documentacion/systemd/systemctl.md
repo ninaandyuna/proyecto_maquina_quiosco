@@ -18,6 +18,8 @@ Los archivos de las unidades disponibles se pueden ver en _/usr/lib/systemd/syst
 
 ## Usar las unidades
 
+| Función | Comando |
+| ------- | ------- |
 | Activar una unidad de inmediato: | `# systemctl start _unidad_` |
 | Desactivar una unidad de inmediato: | `# systemctl stop _unidad_` |
 | Reiniciar la unidad: | `# systemctl restart _unidad_` |
