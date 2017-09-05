@@ -8,64 +8,34 @@ Un ejemplo sería el servicio _httpd.service_ cuyo archivo de configuración ser
 
 ## Tipos de unidades
 
-### _.service_
-
-Describe cómo administrar un servicio o una aplicación en el servidor. Esto incluirá cómo iniciar, detener, reiniciar o recargar el servicio, en qué circunstancias debe iniciarse automáticamente, así como información de dependencia con otras unidades.
-
-
-### _.socket_
-
-Las unidades _socket_ son IPC (_sockets UNIX_), _sockets_ de red o _FIFO_. Esta unidad se utiliza para la activación basada en _socket_, es decir, cuando el socket recibe información, ejecuta un servicio. Debe haber un servicio con el mismo nombre o especificado por la directiva _Service =_.
-
-
-### _.target_
-
-Utilizada para la agrupación lógica de unidades. Hace referencia a otras unidades, que pueden ser controladas conjuntamente. También se pueden utilizar para llevar al sistema a un nuevo estado.
-
-
-### _.slice_
-
-Consiste en un conjunto jerárquico de _units_ organizadas para manejar un grupo de procesos del sistema.
+| Tipo | Descripción |
+| :---: | ----------- |
+| _.service_ | Describe cómo administrar un servicio o una aplicación en el servidor. Esto incluirá cómo iniciar, detener, reiniciar o recargar el servicio, en qué circunstancias debe iniciarse automáticamente, así como información de dependencia con otras unidades. |
+| _.socket_ | Las unidades _socket_ son IPC (_sockets UNIX_), _sockets_ de red o _FIFO_. Esta unidad se utiliza para la activación basada en _socket_, es decir, cuando el socket recibe información, ejecuta un servicio. Debe haber un servicio con el mismo nombre o especificado por la directiva _Service =_. |
+| _.target_ | Utilizada para la agrupación lógica de unidades. Hace referencia a otras unidades, que pueden ser controladas conjuntamente. También se pueden utilizar para llevar al sistema a un nuevo estado. |
+| _.slice_ | Consiste en un conjunto jerárquico de _units_ organizadas para manejar un grupo de procesos del sistema. |
+| _.mount_ | Contiene información sobre un punto de montaje del sistema de archivos controlado por _systemd_.
+| _.automount_ | Configura un punto de montaje que se montará automáticamente. Éstos deben tener el nombre del punto de montaje al que se refieren y una unidad _.mount_ correspondiente para definir las especificaciones del montaje. |
+| _.device_ | Contiene información de una unidad de dispositivo que requiere una gestión de _systemd_. No todos los dispositivos del sistema requieren una unidad de dispositivo _systemd_, solo aquellos marcados con la etiqueta _udev systemd_. |
+| _.swap_ | Esta unidad describe el espacio de intercambio en el sistema. |
+| _.path_ | Define una ruta o _path_ controlada por _systemd_. De forma predeterminada, se iniciará una unidad _.service_ del mismo nombre base que la unidad _.path_ cuando el estado de ésta cambie. |
+| _.timer_ | Sirve para definir un temporizador que será administrado por _systemd_, similar a un trabajo _cron_ para la activación retardada o programada. |
+| _.snapshot_ | Una unidad _.snapshot_ es creada automáticamente por el comando `systemctl snapshot`. Nos permite reconstruir el estado actual del sistema después de realizar cambios. Las instantáneas no sobreviven a través de las sesiones y se utilizan para revertir los estados temporales. |
+| _.scope_ | Son creadas automáticamente por _systemd_ y se encargan de administrar conjuntos de procesos del sistema. Su objetivo es organizar y gestionar recursos para los procesos. A diferencia de las otras unidades, no están configuradas por ficheros de unidad. |
 
 
-### _.mount_
+### Tipos de unidades _.service_
 
-Contiene información sobre un punto de montaje del sistema de archivos controlado por _systemd_.
+Existen distintos tipos de inicio a considerar cuando se escribe un archivo de servicio personalizado. Esto se configura con el parámetro _Type=_ en la sección _[Service]_:
 
-
-### _.automount_
-
-Configura un punto de montaje que se montará automáticamente. Éstos deben tener el nombre del punto de montaje al que se refieren y una unidad _.mount_ correspondiente para definir las especificaciones del montaje.
-
-
-### _.device_
-
-Contiene información de una unidad de dispositivo que requiere una gestión de _systemd_. No todos los dispositivos del sistema requieren una unidad de dispositivo _systemd_, solo aquellos marcados con la etiqueta _udev systemd_.
-
-
-### _.swap_
-
-Esta unidad describe el espacio de intercambio en el sistema.
-
-
-### _.path_
-
-Define una ruta o _path_ controlada por _systemd_. De forma predeterminada, se iniciará una unidad _.service_ del mismo nombre base que la unidad _.path_ cuando el estado de ésta cambie.
-
-
-### _.timer_
-
-Sirve para definir un temporizador que será administrado por _systemd_, similar a un trabajo _cron_ para la activación retardada o programada.
-
-
-### _.snapshot_
-
-Una unidad _.snapshot_ es creada automáticamente por el comando `systemctl snapshot`. Nos permite reconstruir el estado actual del sistema después de realizar cambios. Las instantáneas no sobreviven a través de las sesiones y se utilizan para revertir los estados temporales.
-
-
-### _.scope_
-
-Son creadas automáticamente por _systemd_ y se encargan de administrar conjuntos de procesos del sistema. Su objetivo es organizar y gestionar recursos para los procesos. A diferencia de las otras unidades, no están configuradas por ficheros de unidad.
+| Tipo | Descripción |
+| :---: | ----------- |
+| _Type=simple_ (por defecto) | _systemd_ consedira que el servicio se iniciará de inmediato. El proceso iniciado con _ExecStart=_ es el proceso principal del servicio. |
+| _Type=forking_ | El servicio se inicia una vez que el proceso se ha bifurcado (_fork_) y el proceso padre ha salido. El proceso iniciado con _ExecStart=_ genera un proceso hijo que se convierte en el proceso principal del servicio. Debemos especificar _PIDFile=_ para que _systemd_ pueda realizar un seguimiento del proceso principal. |
+| _Type=oneshot_ | Este tipo es útil para _scripts_ que realizan un solo trabajo y luego salen. Podemos configurar _RemainAfterExit=yes_ para que _systemd_ todavía considere el servicio como activo después de que el proceso haya salido. |
+| _Type=notify_ | Idéntico a _Type=simple_. En este caso, el _daemon_ enviará una señal a _systemd_ cuando esté listo, es decir, cuando haya terminado de iniciarse. |
+| _Type=dbus_ | El servicio se considera listo cuando el _BusName=_ especificado aparece en el bus de sistema _DBus_. |
+| _Type=idle_ | _systemd_ retrasará el inicio del servicio hasta que se completen todos los trabajos. Tiene un comportamiento muy parecido al de _Type=simple_. |
 
 
 ## Las unidades de plantilla (_template_)
