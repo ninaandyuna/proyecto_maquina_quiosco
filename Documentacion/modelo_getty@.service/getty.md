@@ -31,6 +31,9 @@ Ya que no tenemos que iniciar incondicionalmente los procesos _getty_, esto nos 
 
 Por defecto, este _spawning_ automático se realiza para las _TTVV_ hasta la _tty6_ sólamente (para estar cerca de la configuración predeterminada tradicional de los sistemas _Linux_). Hay que tener en cuenta que el _auto-spawning_ de _gettys_ sólo se intenta si ningún otro subsistema ha tomado posesión de las _TTVV_ todavía.
 
+
+#### _tty1_ y _tty6_
+
 Dos terminales virtuales son manejadas especialmente por la lógica del _auto-spawning_:
 
 En primer lugar, la _tty1_ obtiene tratamiento especial: si arrancamos en modo gráfico el _display manager_ toma posesión de esta _TV_. Si arrancamos en el modo multiusuario (texto), se inicia un _getty_ en ella (incondicionalmente, sin ninguna lógica bajo demanda).
@@ -62,9 +65,7 @@ El especificador `%I` hace referencia al nombre de la instancia sin escapar, es 
 
 Por último, el valor de la variable de entorno `$TERM` indica el tipo de terminal. El valor predeterminado es _vt100_ o _linux_ para _Linux_ en un terminal virtual.
 
-```
-Type=idle
-```
+`Type=idle`
 
 Esta directiva retrasará el inicio del servicio hasta que se completen todos los trabajos (solicitudes de cambio de estado a las unidades) para evitar contaminar el _login prompt_ con mensajes de inicio del sistema.
 
