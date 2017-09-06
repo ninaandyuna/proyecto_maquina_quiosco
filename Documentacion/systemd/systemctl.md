@@ -10,6 +10,9 @@ Es la principal orden para controlar _systemd_.
 | ------- | ------- |
 | Estado del sistema: | `$ systemctl status` |
 | Listado de unidades activas: | `$ systemctl list-units` |
+| Listado de todas las unidades: | `$ systemctl list-units --all` |
+| Listado de todas las unidades inactivas: | `$ systemctl list-units --all --state=inactive` |
+| Listado de unidades de servicio: | `$ systemctl list-units --type=service` |
 | Listado de unidades que han tenido problemas: | `$ systemctl --failed` |
 | Listado de todas las unidades instaladas: | `$ systemctl list-unit-files` | 
 
@@ -41,6 +44,8 @@ El _output_ al ejecutar `$ systemctl list-units` contiene las siguientes columna
 | Enmascarar una unidad para que sea imposible iniciarla: | `# systemctl mask _unidad_` |
 | Desenmascarar una unidad: | `# systemctl unmask _unidad_` |
 | Desactivar el inicio automático durante el arranque: | `# systemctl disable _unidad_` |
+| Mostrar el fichero de unidad: | `$ systemctl cat _unidad_` |
+| Listar el árbol de dependecias de una unidad: | `$ systemctl list-dependencies _unidad_` |
 | Mostrar la página del manual asociada a una unidad: | `$ systemctl help _unidad_` |
 | Recargar _systemd_, escaneando en busca de unidades nuevas o modificadas: | `# systemctl daemon-reload` |
 
