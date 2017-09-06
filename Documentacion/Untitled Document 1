@@ -1,0 +1,152 @@
+1.
+Unit files are loaded from two locations. From lowest to highest precedence they are:
+/usr/lib/systemd/system/: units provided by installed packages
+/etc/systemd/system/: units installed by the system administrator
+
+
+Modificar los archivos de unidad suministrados
+Para editar un archivo de unidad proporcionado por un paquete, podemos crear un directorio llamado /etc/systemd/system/unit.d/ por ejemplo /etc/systemd/system/httpd.service.d/ y colocar los archivos *.conf en dicho directorio para reemplazarlos o añadir nuevas opciones. systemd analizará estos archivos *.conf y los aplicará antes que los de la unidad original. Por ejemplo, si deseamos simplemente agregar una dependencia adicional a una unidad, podemos crear el siguiente archivo:
+/etc/systemd/system/unit.d/customdependency.conf
+[Unit]
+Requires=dependencia nueva
+After=dependencia nueva
+Siguiendo otro ejemplo, con el fin de reemplazar la directiva ExecStart para una unidad que no es del tipo oneshot, crearemos el siguiente archivo:
+/etc/systemd/system/unit.d/customexec.conf
+[Service]
+ExecStart=
+ExecStart=orden nueva
+Otro último ejemplo, para reiniciar automáticamente un servicio:
+/etc/systemd/system/unit.d/restart.conf
+[Service]
+Restart=always
+RestartSec=30
+A continuación, ejecutaremos lo que sigue para que los cambios surtan efecto:
+# systemctl daemon-reload
+# systemctl restart unidad
+Por otro lado, podemos copiar el archivo de la antigua unidad desde /usr/lib/systemd/system/ a /etc/systemd/system/ y realizar los cambios allí. Un archivo de unidad ubicado en /etc/systemd/system/ siempre tiene preferencia sobre la misma unidad localizada en /usr/lib/systemd/system/
+
+
+2.
+Manejar las dependencias
+Con systemd las dependencias pueden ser resueltas planificando la unidad correctamente. El caso más típico es que la unidad A requiere la unidad B para poder funcionar, por lo que esta última debe iniciarse antes que A. En ese caso, agregue Requires=B y After=B a la sección [Unit] de A. Si la dependencia es opcional agregue, en su lugar, Wants=B y After=B. Tenga en cuenta que Wants= y Requires= no incluyen After=, lo que significa que si After= no esté especificado, las dos unidades se iniciarán en paralelo.
+Las dependencias se colocan normalmente en los archivos .service y no en los .target. Por ejemplo, network.target es llamado por cualquiera que sea el servicio que configure las interfaces de red, por lo tanto, la solicitud que hace después la propia unidad personalizada es suficiente, ya que network.target se inicia de todos modos.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+¿Cómo configuro el inicio de sesión automático en una terminal de consola virtual?
+
+Primero crear un nuevo servicio similar a getty@.service:
+
+# cp /lib/systemd/system/getty@.service \
+     /etc/systemd/system/autologin@.service
+# ln -s /etc/systemd/system/autologin@.service \
+        /etc/systemd/system/getty.target.wants/getty@tty8.service
+a continuación editar ExecStart, Restart y los valores de Alias, como este:
+
+...
+ExecStart=-/sbin/mingetty --autologin USERNAME %I
+Restart=no
+...
+Alias=getty.target.wants/getty@tty8.service
+y finalmente volver a cargar el demonio e iniciar el servicio:
+
+systemctl daemon-reload
+systemctl start getty@tty8.service
+Tenga en cuenta que si sale de la sesión tty8, puede usarla hasta el siguiente reinicio o arranque manual por systemctl, excepto si deja Restart como 'always', pero recomiendo evitar esto por razones de seguridad.
+
+¿Cómo personalizar un archivo unidad o agregar uno personalizado?
+
+Los archivos unidad de /etc/systemd/system tienen una mayor precedencia sobre archivos unidad de /lib/systemd/system. Copiarlos desde éste último al anterior y personalizarlos según sus requisitos.
+
+Si una línea comienza con .include seguida de un nombre de archivo, el archivo especificado se analizará en este punto. Asegúrese que el archivo que se incluye tiene los encabezados de sección adecuados antes de cualquier directiva.
+
+Se debe usar la instrucción .include en lugar de copiar el conjunto de archivos unidad de /lib/systemd/system a /etc/systemd/system si es posible. Esto le permitirá actualizar correctamente las directivas sin cambios durante las actualizaciones futuras del paquete.
+
+Tenga cuidado cuando use .include junto con directivas que puedan definirse varias veces (como EnvironmentFile=), ya que sólo podemos añadir nuevas directivas, pero no podemos quitar las ya definidas. Tenemos que copiar todos los archivos de /lib/systemd/system a /etc/systemd/system en este caso.
+
+Digamos que usamos un servidor lighttpd y queremos bajar su valor de niceness. Todo lo que tenemos que hacer es añadir Nice=-5 en el archivo lighttpd.service. Podemos hacer esto copiando todo el archivo de /lib/systemd/system/lighttpd.service a /etc/systemd/system/lighttpd.service o creando el siguiente archivo en /etc/systemd/system/lighttpd.service:
+
+.include /lib/systemd/system/lighttpd.service
+[Service]
+Nice=-5
+No olvide recargar el demonio de systemd usando systemctl daemon-reload después de editar un archivo unidad.
+
+Note.png
+Cuando la modificación de una unidad que tiene un enlace simbólico (symlink) apuntando a esa unidad, por ejemplo como lo hace la display-manager.service -> prefdm.service, el enlace simbólico debe copiarse en lugar de la unidad verdadera como en display-manager.service debe copiarse en el directorio /etc/systemd/system o una nueva unidad creada con .includes que lleve ese nombre.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Principalmente, mi proyecto girará en torno a las unidades _.service_ y _.target_, ya que profundizaré con más detalle en su 
+funcionamiento y utlización a la hora de crear servicios y máquinas quiosco. 
+
+
+http://www.vozidea.com/como-crear-servicios-en-ubuntu-con-systemd
+https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files
+
+
+
+
+
+
+
+
+
+
+
+
+Nota: Si los servicios no tienen una sección [Install] significa, por lo general, que se les llama de forma automática por otros servicios. Pero si necesita instalarlos manualmente, utilice la orden siguiente, reemplazando foo con el nombre del servicio.
+# ln -s /usr/lib/systemd/system/foo.service /etc/systemd/system/graphical.target.wants/
+
+
+
+
+
+
+
+
+## SUGERENCIA
+
+When starting X automatically, it may be useful to start getty@tty1.service immediately by adding Type=simple into the drop-in snippet. Both the init system and startx can be silenced to avoid the interleaving of their messages during boot-up.
+
+Al iniciar X automáticamente, puede ser útil iniciar getty@tty1.service de inmediato agregando Type = simple en el fragmento de entrada. Tanto el sistema init como el startx pueden silenciarse para evitar el entrelazado de sus mensajes durante el arranque.
+
+
