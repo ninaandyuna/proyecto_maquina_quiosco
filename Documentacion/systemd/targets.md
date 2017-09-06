@@ -9,6 +9,7 @@ Algunos de ellos son activados heredando todos los servicios de otro _target_ e 
 ## Tabla comparativa entre los niveles de ejecución de _SysV_ y los _targets_ de _systemd_
 
 | _Runlevel_ de _SysV_ | _Target_ de _systemd_ | _Descripción_ |
+| -------------------- | --------------------- | ------------- |
 | 0 | _poweroff.target_, _runlevel0.target_ | Detiene el sistema. |
 | 1, s, _single_ | _rescue.target_, _runlevel1.target_ | Modo de usuario único. |
 | 2, 4 | _runlevel2.target_, _runlevel4.target_, _multi-user.target_ | Definidos por el usuario. Por defecto, idéntico a _multi-user.target_. |
