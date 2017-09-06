@@ -16,7 +16,7 @@ En _systemd_, dos unidades _template_ son responsables de generar un _login prom
 
 1. _getty@.service_ es responsable de los _login prompts_ del terminal virtual, es decir, los de la pantalla VGA expuestos en _/dev/tty1_ y dispositivos similares.
 
-2. _serial-getty@.service_ es responsable de todos los demás terminales, incluyendo puertos seriales como _/dev/ttyS0_.
+2. _serial-getty@.service_ es responsable de todos los demás terminales, incluyendo puertos seriales como _/dev/ttyS0_. A diferencia de la unidad _getty@.service_, la variable de entorno _$TERM_ se establece en _vt102_ y no como _linux_, valor por defecto en las terminales virtuales.
 
 
 ### Terminales virtuales
@@ -59,9 +59,11 @@ ExecStart=-/sbin/agetty --noclear %I $TERM
 
 Este servicio ejecuta el comando _agetty_, que lo que hace es abrir un puerto _tty_, solicitar un _login_ e invocar el comando `/bin/login`.
 
+El carácter "-" antes del comando permite que un código de salida del comando normalmente considerado como fracaso (_failed_) sea ignorado y considerado un éxito (_success_).
+
 La opción `--noclear` impide que se borre la pantalla antes de solicitar el _login prompt_. De todos modos, la pantalla se borra debido a la directiva _TTYVTDisallocate=_.
 
-El especificador `%I` hace referencia al nombre de la instancia sin escapar, es decir, la cadena de caràcteres que se encuentra entre el caràcter _@_ y el sufijo del nombre de la unidad, en este caso _.service_ (_tty1_).
+El especificador `%I` hace referencia al nombre de la instancia al cual se le ha aplicado un _unescaping algorithm_. Es la cadena de caràcteres que se encuentra entre el caràcter _@_ y el sufijo del nombre de la unidad, en este caso _.service_ (_tty1_).
 
 Por último, el valor de la variable de entorno `$TERM` indica el tipo de terminal. El valor predeterminado es _vt100_ o _linux_ para _Linux_ en un terminal virtual.
 

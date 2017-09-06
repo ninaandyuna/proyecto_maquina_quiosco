@@ -1,9 +1,9 @@
 
 # ¿Qué son las _units_ o unidades?
 
-_systemd_ se basa en la noción de unidades, compuestas de un nombre y una extensión que indica de qué tipo de unidad se trata. Además cada unidad tiene su correspondiente archivo de configuración cuyo nombre es idéntico.
+_systemd_ se basa en la noción de unidades, compuestas de un nombre y una extensión que indica de qué tipo de unidad se trata. Además cada unidad tiene su correspondiente fichero de configuración cuyo nombre es idéntico.
  
-Un ejemplo sería el servicio _httpd.service_ cuyo archivo de configuración sería _/usr/lib/systemd/system/httpd.service_.
+Un ejemplo sería el servicio _httpd.service_ cuyo fichero de configuración sería _/usr/lib/systemd/system/httpd.service_.
 
 
 ## Tipos de unidades
@@ -44,12 +44,12 @@ Los archivos de unidades de plantilla permiten que _systemd_ direccione varias u
 
 * _getty@.service_: unidad de plantilla
 
-* _getty@tty1.service_: instancia de la unidad de plantilla
+* _getty@tty1.service_, _getty@tty3.service_, etc: instancias de la unidad de plantilla
 
 La cadena de carácteres entre el _@_ y el sufijo de la unidad recibe el nombre de identificador de instancia. Es un argumento que se le pasa a _systemd_ para usarlo en el fichero de la unidad de plantilla. Se puede utilizar para personalizar la forma en que _systemd_ trata con esa instancia específica de la unidad, de manera que pueden existir varias instancias de la misma unidad.
 
-Se utilizan dos identificadores en el fichero de la unidad para pasar el argumento de instancia:
+Se utilizan dos especificadores en el fichero de la unidad para pasar el argumento de instancia:
 
-* _%i_ pasa el argumento, especialmente formateado (escapado).
-* _%I_ pasa el argumento literalmente sin escapar.
+* _%i_ pasa el identificador de instancia literalmente sin escapar.
+* _%I_ pasa el identificador de instancia a través de un simple _unescaping algorithm_.
 
