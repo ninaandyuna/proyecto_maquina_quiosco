@@ -6,7 +6,7 @@ _systemd_ utiliza _targets_ que sirven un propósito similar a los _runlevels_ o
 Algunos de ellos son activados heredando todos los servicios de otro _target_ e implementando servicios adicionales. Como hay _targets_ de _systemd_ que imitan los _runlevels_ de _SystemVinit_, es posible pasar de un _target_ a otro utilizando la orden `# telinit _RUNLEVEL_`.
 
 
-## Tabla comparativa entre los niveles de ejecución de _SysV_ y los _targets_ de _systemd_
+## Tabla comparativa entre los _runlevels_ de _SysV_ y los _targets_ de _systemd_
 
 | _Runlevel_ de _SysV_ | _Target_ de _systemd_ | _Descripción_ |
 | :------------------: | --------------------- | ------------- |	
