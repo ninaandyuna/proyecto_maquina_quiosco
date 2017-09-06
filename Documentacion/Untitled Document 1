@@ -1,31 +1,3 @@
-1.
-Unit files are loaded from two locations. From lowest to highest precedence they are:
-/usr/lib/systemd/system/: units provided by installed packages
-/etc/systemd/system/: units installed by the system administrator
-
-
-Modificar los archivos de unidad suministrados
-Para editar un archivo de unidad proporcionado por un paquete, podemos crear un directorio llamado /etc/systemd/system/unit.d/ por ejemplo /etc/systemd/system/httpd.service.d/ y colocar los archivos *.conf en dicho directorio para reemplazarlos o añadir nuevas opciones. systemd analizará estos archivos *.conf y los aplicará antes que los de la unidad original. Por ejemplo, si deseamos simplemente agregar una dependencia adicional a una unidad, podemos crear el siguiente archivo:
-/etc/systemd/system/unit.d/customdependency.conf
-[Unit]
-Requires=dependencia nueva
-After=dependencia nueva
-Siguiendo otro ejemplo, con el fin de reemplazar la directiva ExecStart para una unidad que no es del tipo oneshot, crearemos el siguiente archivo:
-/etc/systemd/system/unit.d/customexec.conf
-[Service]
-ExecStart=
-ExecStart=orden nueva
-Otro último ejemplo, para reiniciar automáticamente un servicio:
-/etc/systemd/system/unit.d/restart.conf
-[Service]
-Restart=always
-RestartSec=30
-A continuación, ejecutaremos lo que sigue para que los cambios surtan efecto:
-# systemctl daemon-reload
-# systemctl restart unidad
-Por otro lado, podemos copiar el archivo de la antigua unidad desde /usr/lib/systemd/system/ a /etc/systemd/system/ y realizar los cambios allí. Un archivo de unidad ubicado en /etc/systemd/system/ siempre tiene preferencia sobre la misma unidad localizada en /usr/lib/systemd/system/
-
-
 2.
 Manejar las dependencias
 Con systemd las dependencias pueden ser resueltas planificando la unidad correctamente. El caso más típico es que la unidad A requiere la unidad B para poder funcionar, por lo que esta última debe iniciarse antes que A. En ese caso, agregue Requires=B y After=B a la sección [Unit] de A. Si la dependencia es opcional agregue, en su lugar, Wants=B y After=B. Tenga en cuenta que Wants= y Requires= no incluyen After=, lo que significa que si After= no esté especificado, las dos unidades se iniciarán en paralelo.
