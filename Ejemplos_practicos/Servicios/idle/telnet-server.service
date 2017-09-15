@@ -1,11 +1,11 @@
 [Unit]
-Description=Servidor Daytime
+Description=Servidor Telnet
 #Documentation=
 After=network.target
 
 [Service]
-Type=notify
-ExecStart=/usr/bin/python /bin/echo_server_multi.py
+Type=idle
+ExecStart=/usr/bin/python /bin/telnet-server.py
 ExecStop=/usr/bin/kill -TERM $MAINPID
 
 [Install]
