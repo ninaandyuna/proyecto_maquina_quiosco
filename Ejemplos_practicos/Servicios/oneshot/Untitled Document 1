@@ -1,25 +1,22 @@
 [Unit]
 Description=Servicio que envia un e-mail al apagar el sistema
 #Documentation=
-Requires
-Before=shutdown.target
-DefaultDependencies=no
+After=network.target
+
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/python /bin/enviar_email.py
+ExecStart=/bin/true
+ExecStop=/usr/bin/python /bin/enviar_email.py
 RemainAfterExit=yes
 
+[Install]
+WantedBy=multi-user.target
 
 
 
 
 
-
-
-
-
---------------
 
 
 
@@ -40,8 +37,6 @@ RemainAfterExit=yes
 WantedBy=shutdown.target
 
 
------------
-
 
 [Unit]
 Description=runs only upon shutdown
@@ -55,31 +50,3 @@ Type=oneshot
 ExecStart=/bin/true
 ExecStop=/usr/local/bin/yourscript
 RemainAfterExit=yes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-[Unit]
-Description=Crea_fichero
-Documentation=man:systemd-halt.service(8)
-DefaultDependencies=no
-Requires=shutdown.target umount.target final.target
-After=shutdown.target umount.target final.target
-Before=systemd-poweroff.service
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/crea_fichero.sh
-
-
-
