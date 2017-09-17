@@ -1,7 +1,0 @@
-[Unit]
-Description=Simple DBus service
-
-[Service]
-Type=dbus
-BusName=org.ejemplo.simple-dbus-service
-ExecStart=/usr/bin/crea_fichero.sh
