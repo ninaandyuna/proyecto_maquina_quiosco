@@ -5,6 +5,7 @@ Description=Servicio que realiza un backup del directorio /home/adri/ (/root/bac
 [Service]
 Type=oneshot
 RemainAfterExit=yes
+#No hace nada, sale con un código de estado que indica éxito (success)
 ExecStart=/bin/true
 ExecStop=/bin/backup-shutdown.sh
 
