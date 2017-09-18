@@ -8,13 +8,15 @@ Esto es conveniente para los demonios y otros servicios que normalmente se ejecu
 
 ## ¿Cómo funciona?
 
-Según la configuración predeterminada en _/etc/pam.d/system-login_, el módulo _pam_systemd_ inicia automáticamente una instancia `systemd --user` cuando el usuario inicia sesión por primera vez. Este proceso sobrevivirá mientras exista una sesión para ese usuario, y se matará tan pronto como se cierre la última sesión para el usuario.
+Según la configuración predeterminada en _/etc/pam.d/system-login_, el módulo _pam_systemd.so_ inicia automáticamente una instancia `systemd --user` cuando el usuario inicia sesión por primera vez, iniciando _user@.service_. Este proceso sobrevivirá mientras exista una sesión para ese usuario, y se matará tan pronto como se cierre la última sesión para el usuario.
 
 Por lo tanto, la instancia `systemd --user` es un proceso por usuario y no por sesión. Esto significa que todos los servicios de usuario se ejecutan fuera de una sesión y, como consecuencia, los programas que necesiten ser ejecutados dentro de una sesión probablemente se romperán en los servicios de usuario.
 
 Es importante saber que `systemd --user` se ejecuta como un proceso separado del proceso `systemd --system`. Las unidades de usuario no pueden referirse o depender de las unidades del sistema.
 
 Cuando se habilita (_enabled_) el inicio automático de las instancias de usuario, la instancia se inicia en el arranque y no se eliminará. La instancia de usuario _systemd_ es responsable de administrar servicios de usuario, que pueden ser utilizados para ejecutar demonios o tareas automatizadas, con todos los beneficios de _systemd_, como activación de _socket_, temporizadores o _timers_, sistema de dependencia o control estricto de procesos a través de _cgroups_.
+
+Con el comando `$ systemctl --user status` podemos asegurarnos de que la instancia de usuario se ha iniciado correctamente.
 
 Las unidades de usuario se encuentran en los siguientes directorios (ordenados por precedencia ascendente):
 
@@ -27,14 +29,29 @@ Las unidades de usuario se encuentran en los siguientes directorios (ordenados p
 4. _~/.config/systemd/user/_ donde el usuario pone sus propias unidades.
 
 
+## La unidad _user@.service_
 
+```
+[Unit]
+Description=User Manager for UID %i
+After=systemd-user-sessions.service
 
-**Cuando se inicia la instancia de usuario _systemd_, se muestra el _default.target_. Otras unidades pueden ser controladas manualmente con `systemctl --user`.**
+[Service]
+User=%i
+PAMName=systemd-user
+Type=notify
+ExecStart=-/usr/lib/systemd/systemd --user
+Slice=user-%i.slice
+KillMode=mixed
+Delegate=yes
+TasksMax=infinity
+TimeoutStopSec=120s
+```
 
 
 ## Configuración básica
 
-Como he mencionado anteriormente, todos los servicios del usuario se colocarán en _~/.config/systemd/user/_. Para ejecutar servicios en el primer inicio de sesión, ejecutamos `systemctl --user enable service` para cualquier servicio que queramos iniciar de forma automática.
+Como he mencionado anteriormente, todos los servicios del usuario se colocarán en _~/.config/systemd/user/_. Para ejecutar servicios en el primer inicio de sesión, ejecutamos `systemctl --user enable servicio` para cualquier servicio que queramos iniciar de forma automática.
 
 
 ### Variables de entorno
@@ -45,16 +62,9 @@ La instancia de usuario de _systemd_ no hereda ninguna de las variables de entor
 
 2. Con la opción _DefaultEnvironment_ en el fichero _/etc/systemd/user.conf_. Afecta a todas las unidades de usuario.
 
-
-
-
 3. Agregando un fichero de configuración _drop-in_ en _/etc/systemd/system/user@.service.d/_. Afecta a todas las unidades de usuario.
-
-
-
+	
 4. En cualquier momento, utilizar `systemctl --user set-environment` o `systemctl --user import-environment`. Afecta a todas las unidades de usuario iniciadas después de establecer las variables de entorno, pero no las unidades que ya estaban en ejecución.
-
-5. Usando el comando `dbus-update-activation-environment --systemd --all` proporcionado por _dbus_. Tiene el mismo efecto que `systemctl --user import-environment`, pero también afecta a la sesión _D-Bus_. 
 
 Después de la configuración, se puede utilizar el comando `systemctl --user show-environment` para verificar que los valores son correctos.
 
@@ -63,16 +73,13 @@ Después de la configuración, se puede utilizar el comando `systemctl --user sh
 
 Creamos el directorio _/etc/systemd/system/user@.service.d/_ y en su interior generamos un fichero llamado _local.conf_:
 
-`[Service]`
-`Environment="PATH=/usr/lib/ccache/bin:/usr/local/bin:/usr/bin:/bin"`
-`Environment="EDITOR=nano -c"`
-`Environment="BROWSER=firefox"`
-`Environment="NO_AT_BRIDGE=1"`
-
-
-COMPROVAR
-
-
+```
+[Service]
+Environment="PATH=/usr/lib/ccache/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="EDITOR=nano -c"
+Environment="BROWSER=firefox"
+Environment="NO_AT_BRIDGE=1"
+```
 
 
 #### _DISPLAY_ y _XAUTHORITY_
@@ -100,95 +107,28 @@ Sabemos que la instancia de usuario _systemd_ se inicia después del primer inic
 `# loginctl enable-linger username`
 
 
-## _Xorg_ y _systemd_
+## Ejemplo de servicio de usuario
 
-Hay varias formas de ejecutar _xorg_ dentro de las unidades _systemd_. A continuación hay dos opciones, ya sea iniciando una nueva sesión de usuario con un proceso _xorg_, o iniciando _xorg_ desde un servicio de usuario de _systemd_.
+```
+~/.config/systemd/user/mplayer.service
 
+[Unit]
+Description=mplayer streaming con respawn automático
+#Documentation=
+After=network.target
 
-### Inicio de sesión automático en _Xorg_ sin gestor de pantallas
+[Service]
+Type=simple
+ExecStart=/bin/mplayer.sh
+ExecStop=/usr/bin/kill -TERM $MAINPID
+Restart=always
+RestartSec=10s
 
+[Install]
+WantedBy=multi-user.target
+```
 
-
-
-### _Xorg_ como un servicio de usuario _systemd_
-
-El hecho de que _xorg_ se pueda ejecutar desde dentro de un servicio de usuario _systemd_ permite que otras unidades relacionadas con _X_ se puedan hacer depender de _xorg_, etc. Cabe destacar que _xorg-server_ puede ejecutarse sin privilegios pero dentro de una sesión y, con el fin de evitar esto, tendrá que acabar ejecutándose con privilegios de _root_.
-
-A continuación, explicaré cómo lanzar _xorg_ desde un servicio de usuario:
-
-1. Hacemos que _xorg_ funcione con privilegios de _root_ y para cualquier usuario, editando _/etc/X11/Xwrapper.config_:
-
-`allowed_users=anybody`
-`needs_root_rights=yes`
-
-2. Añadiremos las siguientes unidades a _~/.config/systemd/user_:
-
- 1. _~/.config/systemd/user/xorg@.socket_:
-
-`[Unit]`
-`Description=Socket for xorg at display %i`
-
-`[Socket]`
-`ListenStream=/tmp/.X11-unix/X%i`
-
- 2. _~/.config/systemd/user/xorg@.service_:
-
-`[Unit]`
-`Description=Xorg server at display %i`
-
-`Requires=xorg@%i.socket`
-`After=xorg@%i.socket`
-
-`[Service]`
-`Type=simple`
-`SuccessExitStatus=0 1`
-
-`ExecStart=/usr/bin/Xorg :%i -nolisten tcp -noreset -verbose 2 "vt${XDG_VTNR}"`
-
-_${XDG\_VTNR}_ es la terminal virtual donde se lanzará _xorg_. Podemos codificarla en la unidad de servicio (_hard-coded_) o configurarla en el entorno _systemd_ con el comando:
-
-`$ systemctl --user set-environment XDG_VTNR=1`
-
-_xorg_ debe ser lanzado en la misma terminal virtual donde el usuario ha iniciado sesión. De lo contrario, _logind_ considerará la sesión inactiva.
-
-3. Tenemos que asegurarnos de configurar la variable de entorno _DISPLAY_.
-
-4. A continuación, para habilitar la activación de _socket_ para _xorg_ en el _display_ 0 y _tty2_ haríamos lo siguiente:
-
-`$ systemctl --user set-environment XDG_VTNR=2`
-
-Para que _xorg@.service_ sepa qué terminal virtual utilizar.
-
-` systemctl --user start xorg@0.socket`
-
-Empezar a escuchar en el _socket_ para el _display_ 0.
-
-Ahora ejecutar cualquier aplicación _X_ lanzará _xorg_ en la _tty2_ automáticamente.
-
-
-
-
-
-La variable de entorno XDG_VTNR se puede establecer en el entorno systemd desde .bash_profile y, a continuación, se puede iniciar cualquier aplicación X, incluido un gestor de ventanas, como una unidad systemd que dependa de xorg@0.socket.
-
-En la actualidad, ejecutar un gestor de ventanas como un servicio de usuario significa que se ejecuta fuera de una sesión con los problemas que esto puede traer: romper la sesión.
-
-
-
-el módulo pam_systemd.so lanza una instancia de usuario, por defecto, en el primer inicio de sesión de un usuario, iniciando user@.service
-
-La instancia systemd --user se ejecuta fuera de cualquier sesión de usuario. Esto está bien para correr, por ejemplo mpd, pero puede ser molesto si uno trata de iniciar un gestor de ventanas desde la instancia de usuario de systemd. Entonces polkit evita montar usb, reinicar, etc., como un usuario normal, porque el gestor de ventanas se ha ejecutado fuera de la sesión activa.
-
-Las unidades en la instancia de usuario no heredan cualquier entorno, por lo que se debe fijar manualmente.
-
-1. Asegúrese de que la instancia de usuario de systemd se inicia correctamente. Puede comprobar esto con:
-$ systemctl --user status
-
-
-
-
-
-
-
-
+Iniciar el servicio: `$ systemctl --user start mplayer.service`
+Detener el servicio: `$ systemctl --user stop mplayer.service`
+Habilitar el servicio: `$ systemctl --user enable mplayer.service`
 

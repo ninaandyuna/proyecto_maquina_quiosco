@@ -1,0 +1,69 @@
+## _Xorg_ y _systemd_
+
+Hay varias formas de ejecutar _xorg_ dentro de las unidades _systemd_. A continuación hay dos opciones, ya sea iniciando una nueva sesión de usuario con un proceso _xorg_, o iniciando _xorg_ desde un servicio de usuario de _systemd_.
+
+
+### Inicio de sesión automático en _Xorg_ sin gestor de pantallas
+
+
+
+
+### _Xorg_ como un servicio de usuario _systemd_
+
+El hecho de que _xorg_ se pueda ejecutar desde dentro de un servicio de usuario _systemd_ permite que otras unidades relacionadas con _X_ se puedan hacer depender de _xorg_, etc. Cabe destacar que _xorg-server_ puede ejecutarse sin privilegios pero dentro de una sesión y, con el fin de evitar esto, tendrá que acabar ejecutándose con privilegios de _root_.
+
+A continuación, explicaré cómo lanzar _xorg_ desde un servicio de usuario:
+
+1. Hacemos que _xorg_ funcione con privilegios de _root_ y para cualquier usuario, editando _/etc/X11/Xwrapper.config_:
+
+`allowed_users=anybody`
+`needs_root_rights=yes`
+
+2. Añadiremos las siguientes unidades a _~/.config/systemd/user_:
+
+ 1. _~/.config/systemd/user/xorg@.socket_:
+
+`[Unit]`
+`Description=Socket for xorg at display %i`
+
+`[Socket]`
+`ListenStream=/tmp/.X11-unix/X%i`
+
+ 2. _~/.config/systemd/user/xorg@.service_:
+
+`[Unit]`
+`Description=Xorg server at display %i`
+
+`Requires=xorg@%i.socket`
+`After=xorg@%i.socket`
+
+`[Service]`
+`Type=simple`
+`SuccessExitStatus=0 1`
+
+`ExecStart=/usr/bin/Xorg :%i -nolisten tcp -noreset -verbose 2 "vt${XDG_VTNR}"`
+
+_${XDG\_VTNR}_ es la terminal virtual donde se lanzará _xorg_. Podemos codificarla en la unidad de servicio (_hard-coded_) o configurarla en el entorno _systemd_ con el comando:
+
+`$ systemctl --user set-environment XDG_VTNR=1`
+
+_xorg_ debe ser lanzado en la misma terminal virtual donde el usuario ha iniciado sesión. De lo contrario, _logind_ considerará la sesión inactiva.
+
+3. Tenemos que asegurarnos de configurar la variable de entorno _DISPLAY_.
+
+4. A continuación, para habilitar la activación de _socket_ para _xorg_ en el _display_ 0 y _tty2_ haríamos lo siguiente:
+
+`$ systemctl --user set-environment XDG_VTNR=2`
+
+Para que _xorg@.service_ sepa qué terminal virtual utilizar.
+
+` systemctl --user start xorg@0.socket`
+
+Empezar a escuchar en el _socket_ para el _display_ 0.
+
+Ahora ejecutar cualquier aplicación _X_ lanzará _xorg_ en la _tty2_ automáticamente.
+
+
+La variable de entorno XDG_VTNR se puede establecer en el entorno systemd desde .bash_profile y, a continuación, se puede iniciar cualquier aplicación X, incluido un gestor de ventanas, como una unidad systemd que dependa de xorg@0.socket.
+
+En la actualidad, ejecutar un gestor de ventanas como un servicio de usuario significa que se ejecuta fuera de una sesión con los problemas que esto puede traer: romper la sesión.
