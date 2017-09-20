@@ -5,7 +5,7 @@
 
 Mi proyecto gira en torno al análisis de las unidades de _systemd_, especialmente en las unidades _.service_ y _.target_, ya que he profundizado con más detalle en su funcionamiento y utlización a la hora de crear servicios y máquinas quiosco. 
 
-![esquema_estructura](Imagenes/systemd.png =100x20)
+![esquema_estructura](Imagenes/systemd.png =100)
 
 Podríamos dividir el repositorio en tres apartados:
 
