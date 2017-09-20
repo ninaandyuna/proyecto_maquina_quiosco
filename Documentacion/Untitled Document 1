@@ -74,8 +74,7 @@ Tenga en cuenta que si sale de la sesión tty8, puede usarla hasta el siguiente 
 
 
 
-Principalmente, mi proyecto girará en torno a las unidades _.service_ y _.target_, ya que profundizaré con más detalle en su 
-funcionamiento y utlización a la hora de crear servicios y máquinas quiosco. 
+
 
 
 http://www.vozidea.com/como-crear-servicios-en-ubuntu-con-systemd

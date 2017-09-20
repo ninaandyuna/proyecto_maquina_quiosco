@@ -3,22 +3,27 @@
 
 ## Introducción
 
-The main objective of this repository is to analize all the systemd units and find a way to simulate them in machine without systemd. In this case the best technology to test, is Docker.
+Mi proyecto gira en torno al análisis de las unidades de _systemd_, especialmente en las unidades _.service_ y _.target_, ya que he profundizado con más detalle en su funcionamiento y utlización a la hora de crear servicios y máquinas quiosco. 
 
-In the documentation section, you will find a description of all the types of units. The target, due to it's importance have a special section. Also I included a single section with all the systemd sections and their parameters.
+Podríamos dividir el repositorio en tres apartados:
+
+1. La documentación: Aquí encontrarás todo tipo de información acerca de _systemd_, las mejoras que nos ofrece respecto a _SysVinit_, una extensa y detallada explicación de todos los tipos de unidades que podemos encontrar, así como de las secciones que las forman y sus respectivas directivas. También he investigado acerca del funcionamiento de los servicios _getty@.service_ y _user@.service_.
+
+2. Varios ejemplos prácticos: Este apartado se puede dividir en servicios y _targets_. He creado un servicio de _systemd_ por cada tipo de servicio que podemos encontrar y diferentes targets que equivaldrian a las máquinas quiosco en _systemd_.
+
+3. Presentación: Una presentación clara y sencilla para englobar los conceptos más importantes que he adquirido durante mi investigación.
 
 
 ## Índice del repositorio
 
-* Documentación
+* [Documentación](https://github.com/adriisotuu/)
 
-* Ejemplos prácticos
-	* Servicios
-	* _Targets_
+* [Ejemplos prácticos](https://github.com/adriisotuu/)
+	* [Servicios](https://github.com/adriisotuu/)
+	* [_Targets_](https://github.com/adriisotuu/)
 
-* Presentación
+* [Presentación](https://github.com/adriisotuu/)
 
-* Bibliografía
 
 Adrià Soto Tórtola
 
