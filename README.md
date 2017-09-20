@@ -11,7 +11,7 @@ Podríamos dividir el repositorio en tres apartados:
 
 2. **Varios ejemplos prácticos**: Este apartado se puede dividir en servicios y _targets_. He creado un servicio de _systemd_ por cada tipo de servicio que podemos encontrar y diferentes _targets_ que equivaldrían a las máquinas quiosco en _systemd_.
 
-3. **Presentación**: Una presentación clara y sencilla que engloba los conceptos más importantes que he adquirido durante mi investigación.
+3. **La presentación**: Una presentación clara y sencilla que engloba los conceptos más importantes que he adquirido durante mi investigación.
 
 
 ## Índice del repositorio
