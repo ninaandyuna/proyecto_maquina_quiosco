@@ -1,7 +1,7 @@
 
 # Índice documentación
 
-1. [_systemd_](https://github.com/adriisotuu/)
+1. [Introducción a _systemd_](https://github.com/adriisotuu/)
 
 2. Las unidades en _systemd_
 	* 2.1. [¿Qué son las unidades?](https://github.com/adriisotuu/)
