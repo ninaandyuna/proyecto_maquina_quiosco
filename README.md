@@ -5,8 +5,6 @@
 
 Mi proyecto gira en torno al análisis de las unidades de _systemd_, especialmente en las unidades _.service_ y _.target_, ya que he profundizado con más detalle en su funcionamiento y utlización a la hora de crear servicios y máquinas quiosco. 
 
-->![esquema_estructura](Imagenes/systemd.png)<-
-
 Podríamos dividir el repositorio en tres apartados:
 
 1. **La documentación**: Aquí encontrarás todo tipo de información acerca de _systemd_, las mejoras que nos ofrece respecto a _SysVinit_, una extensa y detallada explicación de todos los tipos de unidades que podemos encontrar, así como de las secciones que las forman y sus respectivas directivas. También he investigado acerca del funcionamiento de los servicios _getty@.service_ y _user@.service_.
@@ -27,9 +25,9 @@ Podríamos dividir el repositorio en tres apartados:
 * [Presentación](https://github.com/adriisotuu/)
 
 
-Adrià Soto Tórtola
+### Adrià Soto Tórtola
 
-2ASIX
+### 2ASIX
 
-2017-2018
+### 2017-2018
 
