@@ -25,9 +25,9 @@ Podríamos dividir el repositorio en tres apartados:
 * [Presentación](https://github.com/adriisotuu/)
 
 
-### Adrià Soto Tórtola
+#### Adrià Soto Tórtola
 
-### 2ASIX
+#### 2ASIX
 
-### 2017-2018
+#### 2017-2018
 
