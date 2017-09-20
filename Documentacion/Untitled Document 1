@@ -37,25 +37,12 @@ systemctl daemon-reload
 systemctl start getty@tty8.service
 Tenga en cuenta que si sale de la sesión tty8, puede usarla hasta el siguiente reinicio o arranque manual por systemctl, excepto si deja Restart como 'always', pero recomiendo evitar esto por razones de seguridad.
 
-¿Cómo personalizar un archivo unidad o agregar uno personalizado?
 
-Los archivos unidad de /etc/systemd/system tienen una mayor precedencia sobre archivos unidad de /lib/systemd/system. Copiarlos desde éste último al anterior y personalizarlos según sus requisitos.
 
-Si una línea comienza con .include seguida de un nombre de archivo, el archivo especificado se analizará en este punto. Asegúrese que el archivo que se incluye tiene los encabezados de sección adecuados antes de cualquier directiva.
 
-Se debe usar la instrucción .include en lugar de copiar el conjunto de archivos unidad de /lib/systemd/system a /etc/systemd/system si es posible. Esto le permitirá actualizar correctamente las directivas sin cambios durante las actualizaciones futuras del paquete.
 
-Tenga cuidado cuando use .include junto con directivas que puedan definirse varias veces (como EnvironmentFile=), ya que sólo podemos añadir nuevas directivas, pero no podemos quitar las ya definidas. Tenemos que copiar todos los archivos de /lib/systemd/system a /etc/systemd/system en este caso.
 
-Digamos que usamos un servidor lighttpd y queremos bajar su valor de niceness. Todo lo que tenemos que hacer es añadir Nice=-5 en el archivo lighttpd.service. Podemos hacer esto copiando todo el archivo de /lib/systemd/system/lighttpd.service a /etc/systemd/system/lighttpd.service o creando el siguiente archivo en /etc/systemd/system/lighttpd.service:
 
-.include /lib/systemd/system/lighttpd.service
-[Service]
-Nice=-5
-No olvide recargar el demonio de systemd usando systemctl daemon-reload después de editar un archivo unidad.
-
-Note.png
-Cuando la modificación de una unidad que tiene un enlace simbólico (symlink) apuntando a esa unidad, por ejemplo como lo hace la display-manager.service -> prefdm.service, el enlace simbólico debe copiarse en lugar de la unidad verdadera como en display-manager.service debe copiarse en el directorio /etc/systemd/system o una nueva unidad creada con .includes que lleve ese nombre.
 
 
 
