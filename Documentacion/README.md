@@ -1,11 +1,11 @@
 
 # Índice documentación
 
-1.[_systemd_](https://github.com/adriisotuu/)
+* 1. [_systemd_](https://github.com/adriisotuu/)
 
-2. Las unidades en _systemd_
-	2.1. [¿Qué son las unidades?](https://github.com/adriisotuu/)
-	2.2. [Las secciones](https://github.com/adriisotuu/)
+* 2. Las unidades en _systemd_
+	* 2.1. [¿Qué son las unidades?](https://github.com/adriisotuu/)
+	* 2.2. [Las secciones](https://github.com/adriisotuu/)
 
 * 3. [Uso básico del comando _systemctl_](https://github.com/adriisotuu/)
 
@@ -26,4 +26,5 @@
 ## Bibliografía
 
 
-	
+
+
