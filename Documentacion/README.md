@@ -39,6 +39,8 @@
 	* [_systemd.directives(7)_](https://www.freedesktop.org/software/systemd/man/systemd.directives.html)
 	* [_agetty(8)_](http://man7.org/linux/man-pages/man8/agetty.8.html)
 	* [_systemd.special(7)_](https://www.freedesktop.org/software/systemd/man/systemd.special.html)
+	* [_bootup(7)_](https://www.freedesktop.org/software/systemd/man/bootup.html)
+
 	* [_systemd.unit(5)_](https://www.freedesktop.org/software/systemd/man/systemd.unit.html)
 	* [_systemctl(1)_](https://www.freedesktop.org/software/systemd/man/systemctl.html)
 
