@@ -9,6 +9,6 @@ Después de que el sistema de ficheros raíz se encuentra y se monta, _initrd_ e
 
 ### Funcionamiento de _systemd_ en el arranque
 
-![arranque_sistema](/Imagenes/inicio.png "_Systemd_ en el arranque del sistema")
+![arranque_sistema](/Imagenes/inicio.png "systemd en el arranque del sistema")
 
 
