@@ -35,10 +35,10 @@
 * [Web _linux_](https://www.linux.com/learn/intro-systemd-runlevels-and-service-management-commands)
 
 * Páginas del manual:
-	* [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html)
-	* [systemd.directives(7)](https://www.freedesktop.org/software/systemd/man/systemd.directives.html)
-	* [agetty(8)](http://man7.org/linux/man-pages/man8/agetty.8.html)
-	* [systemd.special(7)](https://www.freedesktop.org/software/systemd/man/systemd.special.html)
-	* [systemd.unit(5)](https://www.freedesktop.org/software/systemd/man/systemd.unit.html)
-	* [systemctl(1)](https://www.freedesktop.org/software/systemd/man/systemctl.html)
+	* [_logind.conf(5)_](https://www.freedesktop.org/software/systemd/man/logind.conf.html)
+	* [_systemd.directives(7)_](https://www.freedesktop.org/software/systemd/man/systemd.directives.html)
+	* [_agetty(8)_](http://man7.org/linux/man-pages/man8/agetty.8.html)
+	* [_systemd.special(7)_](https://www.freedesktop.org/software/systemd/man/systemd.special.html)
+	* [_systemd.unit(5)_](https://www.freedesktop.org/software/systemd/man/systemd.unit.html)
+	* [_systemctl(1)_](https://www.freedesktop.org/software/systemd/man/systemctl.html)
 
