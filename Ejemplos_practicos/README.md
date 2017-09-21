@@ -20,8 +20,8 @@
 * [Documentación _Arch Linux_](https://wiki.archlinux.org/index.php/Systemd#Writing_unit_files)
 
 * Páginas del manual:
-	* [systemd.service(5)](https://www.freedesktop.org/software/systemd/man/systemd.service.html)
-	* [systemd.directives(7)](https://www.freedesktop.org/software/systemd/man/systemd.directives.html)
-	* [systemd.special(7)](https://www.freedesktop.org/software/systemd/man/systemd.special.html)
-	* [systemd.unit(5)](https://www.freedesktop.org/software/systemd/man/systemd.unit.html)
+	* [_systemd.service(5)_](https://www.freedesktop.org/software/systemd/man/systemd.service.html)
+	* [_systemd.directives(7)_](https://www.freedesktop.org/software/systemd/man/systemd.directives.html)
+	* [_systemd.special(7)_](https://www.freedesktop.org/software/systemd/man/systemd.special.html)
+	* [_systemd.unit(5)_](https://www.freedesktop.org/software/systemd/man/systemd.unit.html)
 
