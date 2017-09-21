@@ -12,3 +12,15 @@ Después de que el sistema de ficheros raíz se encuentra y se monta, _initrd_ e
 ![arranque_sistema](/Imagenes/inicio.png "systemd en el arranque del sistema")
 
 
+
+
+## Apagado del sistema
+
+
+### A
+
+
+![apagado_sistema](/Imagenes/apagado.png "systemd en el apagado del sistema")
+
+
+
