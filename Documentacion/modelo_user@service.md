@@ -129,6 +129,8 @@ WantedBy=multi-user.target
 ```
 
 Iniciar el servicio: `$ systemctl --user start mplayer.service`
+
 Detener el servicio: `$ systemctl --user stop mplayer.service`
+
 Habilitar el servicio: `$ systemctl --user enable mplayer.service`
 
