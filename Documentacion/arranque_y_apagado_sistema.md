@@ -52,6 +52,8 @@ Del mismo modo que sucede en el arranque, consiste en varias unidades _.target_ 
 
 ### Descripción de los _targets_
 
+| _Target_ | Descripción |
+| :------: | ----------- |
 | _shutdown.target_ | Termina los servicios en el apagado del sistema. Los servicios que se terminen en el apagado deben añadir las dependencias _Conflicts=_ y _Before=_ a esta unidad para su unidad de servicio, lo que se hace implícitamente cuando se establece _DefaultDependencies=yes_ (el valor por defecto). |
 | _umount.target_ | Desmonta todos los puntos de montaje y de montaje automático en el apagado del sistema. Los puntos de montaje que se desmontarán al cerrar el sistema agregarán dependencias _Conflicts=_ a esta unidad para su unidad _.mount_ (_DefaultDependencies=yes_). |
 | _final.target_ | Se utiliza durante la lógica de apagado y se puede utilizar para extraer los servicios finales después de que todos los servicios normales ya estén terminados y todos los puntos de montaje desmontados. |
