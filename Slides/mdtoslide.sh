@@ -9,5 +9,5 @@ pandoc \
 	--to=dzslides \
 	--incremental \
 	--css=style.css \
-	--output=file.html \
-file.md
+	--output=presentacion.html \
+presentacion.md

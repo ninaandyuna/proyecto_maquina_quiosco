@@ -41,7 +41,7 @@ Con este ejemplo siempre tendríamos una instancia del proceso _mplayer.sh_ (por
 
 ## _Respawn_ de los procesos en _Linux_ con _systemd_
 
-_systemd_ no utiliza el fichero _/etc/inittab_. Simplemente tenemos que añadir en el fichero de la unidad de servicio la directiva _Restart=_ y, opcionalmente, _RestartSec=_. Estas directivas se encuentran explicadas con mayor detalle en este [apartado](https://github.com/ninaandyuna/proyecto_maquina_quiosco/blob/master/Documentacion/systemd/3.secciones_unidades.md).
+_systemd_ no utiliza el fichero _/etc/inittab_. Simplemente tenemos que añadir en el fichero de la unidad de servicio la directiva _Restart=_ y, opcionalmente, _RestartSec=_. Estas directivas se encuentran explicadas con mayor detalle en este [apartado](https://github.com/).
 
 
 ### Ejemplo de un servicio _respawn_ (_mplayer.service_)
