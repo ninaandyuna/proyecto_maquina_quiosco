@@ -21,31 +21,21 @@ La tabla anterior es una descripción estructural de los _targets_ y su posició
 
 ### Descripción de los _targets_
 
-* _local-fs-pre.target_: Este _target_ se ordena automáticamente antes de todos los puntos de montaje locales marcados con _auto_. Se puede utilizar para ejecutar ciertas unidades antes de todas las monturas locales.
-
-* _local-fs.target_: _systemd-fstab-generator_ agrega automáticamente dependencias de tipo _Before=_ a todas las unidades de montaje que se refieren a puntos de montaje locales para este _target_. Además, agrega dependencias de tipo _Wants=_ a esta unidad _.target_ para aquellos montajes enumerados en _/etc/fstab_ que tienen el conjunto de opciones de montaje automático.
-
-* _swap.target_: Similar a _local-fs.target_, pero para particiones _swap_ y ficheros _swap_.
-
-* _cryptsetup.target_: Agrupa servicios de configuración para todos los dispositivos de bloque cifrados.
-
-* _sysinit.target_: _systemd_ agrega automáticamente dependencias de los tipos _Requires=_ y _After=_ para este _target_ a todos los servicios (excepto para aquellos con _DefaultDependencies=no_). Este _target_ extrae los servicios necesarios para la inicialización del sistema. Estos servicios deben configurarse con _DefaultDependencies=no_ y especificar todas sus dependencias manualmente.
-
-* _timers.target_: Configura todas las unidades de temporizador (_.timer_) que deben estar activas después del arranque del sistema.
-
-* _paths.target_: Configura todas las unidades de ruta (_.path_) que deben estar activas después del arranque.
-
-* _sockets.target_: Configura todas las unidades _.socket_ que tienen que estar activas después del arranque.
-
-* _basic.target_: Cubre el arranque básico. _systemd_ agrega automáticamente la dependencia del tipo _After=_ para esta unidad _.target_ a todos los servicios (excepto para aquellos con _DefaultDependencies=no_).
-
-* _multi-user.target_: Consiste en un sistema multiusuario, no gráfico. De esta unidad depende _graphical.target_.
-
-* _graphical.target_: Consiste en una pantalla de inicio de sesión gráfica, es decir, un sistema multiusuario gráfico. Depende de _multi-user.target_.
-
-* _rescue.target_: Extrae el sistema base (incluyendo los montajes del sistema) y genera un _shell_ de rescate. Aislamos este _target_ con el fin de administrar el sistema en modo de usuario único con todos los sistemas de ficheros montados, pero sin servicios en ejecución, excepto los más básicos.
-
-* _emergency.target_: Inicia un _shell_ de emergencia en la consola principal. No extrae ningún servicio o montaje. Es la versión más mínima de arrancar el sistema para adquirir un _shell_ interactivo; los únicos procesos en ejecución normalmente son sólo el gestor del sistema (_PID_ 1) y el proceso _shell_. También se utiliza cuando falla una comprobación del sistema de ficheros en un sistema de ficheros requerido y el arranque no puede continuar.
+| _Target_ | Descripción |
+| :------: | ----------- |
+| _local-fs-pre.target_ | Este _target_ se ordena automáticamente antes de todos los puntos de montaje locales marcados con _auto_. Se puede utilizar para ejecutar ciertas unidades antes de todas las monturas locales. |
+| _local-fs.target_ | _systemd-fstab-generator_ agrega automáticamente dependencias de tipo _Before=_ a todas las unidades de montaje que se refieren a puntos de montaje locales para este _target_. Además, agrega dependencias de tipo _Wants=_ a esta unidad _.target_ para aquellos montajes enumerados en _/etc/fstab_ que tienen el conjunto de opciones de montaje automático. |
+| _swap.target_ | Similar a _local-fs.target_, pero para particiones _swap_ y ficheros _swap_. |
+| _cryptsetup.target_ | Agrupa servicios de configuración para todos los dispositivos de bloque cifrados. |
+| _sysinit.target_ | _systemd_ agrega automáticamente dependencias de los tipos _Requires=_ y _After=_ para este _target_ a todos los servicios (excepto para aquellos con _DefaultDependencies=no_). Este _target_ extrae los servicios necesarios para la inicialización del sistema. Estos servicios deben configurarse con _DefaultDependencies=no_ y especificar todas sus dependencias manualmente. |
+| _timers.target_ | Configura todas las unidades de temporizador (_.timer_) que deben estar activas después del arranque del sistema. |
+| _paths.target_ | Configura todas las unidades de ruta (_.path_) que deben estar activas después del arranque. |
+| _sockets.target_ | Configura todas las unidades _.socket_ que tienen que estar activas después del arranque. |
+| _basic.target_ | Cubre el arranque básico. _systemd_ agrega automáticamente la dependencia del tipo _After=_ para esta unidad _.target_ a todos los servicios (excepto para aquellos con _DefaultDependencies=no_). |
+| _multi-user.target_ | Consiste en un sistema multiusuario, no gráfico. De esta unidad depende _graphical.target_. |
+| _graphical.target_ | Consiste en una pantalla de inicio de sesión gráfica, es decir, un sistema multiusuario gráfico. Depende de _multi-user.target_. |
+| _rescue.target_ | Extrae el sistema base (incluyendo los montajes del sistema) y genera un _shell_ de rescate. Aislamos este _target_ con el fin de administrar el sistema en modo de usuario único con todos los sistemas de ficheros montados, pero sin servicios en ejecución, excepto los más básicos. |
+| _emergency.target_ | Inicia un _shell_ de emergencia en la consola principal. No extrae ningún servicio o montaje. Es la versión más mínima de arrancar el sistema para adquirir un _shell_ interactivo; los únicos procesos en ejecución normalmente son sólo el gestor del sistema (_PID_ 1) y el proceso _shell_. También se utiliza cuando falla una comprobación del sistema de ficheros en un sistema de ficheros requerido y el arranque no puede continuar. |
 
 
 ## Apagado del sistema
@@ -62,15 +52,10 @@ Del mismo modo que sucede en el arranque, consiste en varias unidades _.target_ 
 
 ### Descripción de los _targets_
 
-* _shutdown.target_: Termina los servicios en el apagado del sistema. Los servicios que se terminen en el apagado deben añadir las dependencias _Conflicts=_ y _Before=_ a esta unidad para su unidad de servicio, lo que se hace implícitamente cuando se establece _DefaultDependencies=yes_ (el valor por defecto).
-
-* _umount.target_: Desmonta todos los puntos de montaje y de montaje automático en el apagado del sistema. Los puntos de montaje que se desmontarán al cerrar el sistema agregarán dependencias _Conflicts=_ a esta unidad para su unidad _.mount_ (_DefaultDependencies=yes_).
-
-* _final.target_: Se utiliza durante la lógica de apagado y se puede utilizar para extraer los servicios finales después de que todos los servicios normales ya estén terminados y todos los puntos de montaje desmontados.
-
-* _reboot.target_: Se utiliza para apagar y reiniciar el sistema.
-
-* _poweroff.target_: Cierra y apaga el sistema.
-
-* _halt.target_: Unidad _.target_ que sirve para detener el sistema.
+| _shutdown.target_ | Termina los servicios en el apagado del sistema. Los servicios que se terminen en el apagado deben añadir las dependencias _Conflicts=_ y _Before=_ a esta unidad para su unidad de servicio, lo que se hace implícitamente cuando se establece _DefaultDependencies=yes_ (el valor por defecto). |
+| _umount.target_ | Desmonta todos los puntos de montaje y de montaje automático en el apagado del sistema. Los puntos de montaje que se desmontarán al cerrar el sistema agregarán dependencias _Conflicts=_ a esta unidad para su unidad _.mount_ (_DefaultDependencies=yes_). |
+| _final.target_ | Se utiliza durante la lógica de apagado y se puede utilizar para extraer los servicios finales después de que todos los servicios normales ya estén terminados y todos los puntos de montaje desmontados. |
+| _reboot.target_ | Se utiliza para apagar y reiniciar el sistema. |
+| _poweroff.target_ | Cierra y apaga el sistema. |
+| _halt.target_ | Unidad _.target_ que sirve para detener el sistema. |
 
